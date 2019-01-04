@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import jQuery from 'jquery';
+// import Timer from './Timer.js';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      appointments: []
+    }
+  }
+
+  componentDidMount() {
+    jQuery.ajax({
+      type: 'GET',
+      url: 'http://localhost:3001/appointments'
+    }).done(data => {
+      this.setState({ appointments: data })
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {/* <h2><Timer /></h2> */}
+        <p className="App-intro">
+          {this.state.appointments.map(appointment => {
+            return (<p>{appointment.title}</p>);
+          })
+          }
+        </p>
       </div>
     );
   }
